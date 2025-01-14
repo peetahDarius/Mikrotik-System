@@ -5,6 +5,11 @@ metadata:
   labels:
     app: celery-beat
 spec:
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
   replicas: 1
   selector:
     matchLabels:
