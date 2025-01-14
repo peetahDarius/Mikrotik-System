@@ -10,7 +10,7 @@ spec:
       maxSurge: 2
       maxUnavailable: 1
     type: RollingUpdate
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: frontend
