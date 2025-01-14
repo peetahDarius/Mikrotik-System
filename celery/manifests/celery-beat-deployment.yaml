@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celery-beat-deployment
+  labels:
+    app: celery-beat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: celery-beat
+  template:
+    metadata:
+      labels:
+        app: celery-beat
+    spec:
+      containers:
+      - name: celery-beat
+        image: peetahdarius/mikrotik-system-backend:latest
+        command: ["celery", "-A", "backend", "beat", "-l", "INFO"]
+        env:
+          - name: CELERY_BACKEND
+            valueFrom:
+              configMapKeyRef:
+                name: celery-beat-config
+                key: CELERY_BACKEND
+          - name: CELERY_BROKER
+            valueFrom:
+              configMapKeyRef:
+                name: celery-beat-config
+                key: CELERY_BROKER
+          - name: DATABASE_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: celery-beat-config
+                key: DATABASE_HOST
+          - name: DATABASE_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: celery-beat-config
+                key: DATABASE_NAME
+          - name: DATABASE_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: celery-beat-config
+                key: DATABASE_PORT
+          - name: DATABASE_USER
+            valueFrom:
+              secretKeyRef:
+                name: celery-beat-secret
+                key: DATABASE_USER
+          - name: DATABASE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: celery-beat-secret
+                key: DATABASE_PASSWORD

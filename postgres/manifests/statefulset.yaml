@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+spec:
+  selector:
+    matchLabels:
+      app: postgres # has to match .spec.template.metadata.labels
+  serviceName: "postgres"
+  replicas: 1 # by default is 1
+  template:
+    metadata:
+      labels:
+        app: postgres # has to match .spec.selector.matchLabels
+    spec:
+      initContainers:
+      - name: init-db
+        image: busybox
+        command:
+          - sh
+          - -c
+          - |
+            if [ ! -f /var/lib/postgresql/data/PG_VERSION ]; then
+              mkdir -p /var/lib/postgresql/data && \
+              chown -R 999:999 /var/lib/postgresql/data && \
+              echo "Database directory initialized."
+            else
+              echo "Database directory already exists, skipping initialization."
+            fi
+        volumeMounts:
+        - name: postgres-volume
+          mountPath: /var/lib/postgresql/data
+      containers:
+      - name: postgres
+        image: postgres:15
+        ports:
+        - containerPort: 5432
+          name: postgres
+        volumeMounts:
+        - name: postgres-volume
+          mountPath: /var/lib/postgresql/data
+        env:
+          - name: POSTGRES_DB
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-configmap
+                key: POSTGRES_DB
+          - name: POSTGRES_USER
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-configmap
+                key: POSTGRES_USER
+          - name: POSTGRES_MAX_CONNECTIONS
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-configmap
+                key: POSTGRES_MAX_CONNECTIONS
+          - name: REPLICATION_USER
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-configmap
+                key: REPLICATION_USER
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-secret
+                key: POSTGRES_PASSWORD
+          - name: REPLICATION_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-secret
+                key: REPLICATION_PASSWORD
+  volumeClaimTemplates:
+  - metadata:
+      name: postgres-volume
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: standard
+      resources:
+        requests:
+          storage: 1Gi

@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celery-worker-deployment
+  labels:
+    app: celery-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: celery-worker
+  template:
+    metadata:
+      labels:
+        app: celery-worker
+    spec:
+      containers:
+      - name: celery-worker
+        image: peetahdarius/mikrotik-system-backend:latest
+        command: ["celery", "-A", "backend", "worker", "-l", "INFO"]
+        env:
+          - name: CELERY_BACKEND
+            valueFrom:
+              configMapKeyRef:
+                name: celery-worker-config
+                key: CELERY_BACKEND
+          - name: CELERY_BROKER
+            valueFrom:
+              configMapKeyRef:
+                name: celery-worker-config
+                key: CELERY_BROKER
+          - name: DATABASE_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: celery-worker-config
+                key: DATABASE_HOST
+          - name: DATABASE_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: celery-worker-config
+                key: DATABASE_NAME
+          - name: DATABASE_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: celery-worker-config
+                key: DATABASE_PORT
+          - name: DATABASE_USER
+            valueFrom:
+              secretKeyRef:
+                name: celery-worker-secret
+                key: DATABASE_USER
+          - name: DATABASE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: celery-worker-secret
+                key: DATABASE_PASSWORD
+

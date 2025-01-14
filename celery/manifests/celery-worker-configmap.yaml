@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: celery-worker-config
+  labels:
+    app: celery-worker
+data:
+  CELERY_BROKER: redis://redis:6379/0
+  CELERY_BACKEND: redis://redis:6379/0
+  DATABASE_NAME: mikrotikapi
+  DATABASE_HOST: postgres
+  DATABASE_PORT: "5432"

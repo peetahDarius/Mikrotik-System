@@ -1,0 +1,23 @@
+const { createProxyMiddleware } = require('http-proxy-middleware');
+
+module.exports = function(app) {
+  app.use(
+    '/api',
+    createProxyMiddleware({
+      target: 'http://10.10.10.63',
+      changeOrigin: true,
+      pathRewrite: { '^/api': '' },
+      secure: false, 
+    })
+  );
+  app.use(
+    '/smsapi',
+    createProxyMiddleware({
+      target: 'https://smsportal.hostpinnacle.co.ke',
+      changeOrigin: true,
+      pathRewrite: { '^/smsapi': '/SMSApi' },
+      secure: false,
+      logLevel: 'debug',
+    })
+  );
+};

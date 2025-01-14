@@ -1,0 +1,8 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: peetahdarius/mikrotik-system-frontend
+    ports:
+      - 80:80
