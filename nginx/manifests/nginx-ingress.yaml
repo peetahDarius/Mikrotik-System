@@ -6,7 +6,7 @@ metadata:
   #   nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: mngt.bmtechsys.com
+  - host: unifi.bmtechsys.com
     http:
       paths:
       - path: /
