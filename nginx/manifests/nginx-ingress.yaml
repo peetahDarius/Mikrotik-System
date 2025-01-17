@@ -3,6 +3,13 @@ kind: Ingress
 metadata:
   name: nginx-ingress
   annotations:
+    nginx.ingress.kubernetes.io/server-snippet: |
+      location ^~ /.well-known/acme-challenge/ {
+        allow all;
+        default_type "text/plain";
+        root /var/www/html;
+      }
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
     cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   ingressClassName: nginx
