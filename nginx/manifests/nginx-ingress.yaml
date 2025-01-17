@@ -9,7 +9,7 @@ spec:
   tls:
   - hosts:
     - unifi.bmtechsys.com
-    secretName: unifi-bmtechsys-com-tls
+    secretName: unifi-bmtechsys-com-tls-tg9hj
   rules:
   - host: unifi.bmtechsys.com
     http:
