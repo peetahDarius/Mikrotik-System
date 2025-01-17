@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: peetahdarius/mikrotik-system-frontend:1.01
+        image: peetahdarius/mikrotik-system-frontend:1.02
         volumeMounts:
           - name: config-volume
             mountPath: /usr/share/nginx/html/config.json
