@@ -50,7 +50,7 @@ const FileUploadModal = ({ closeFileUploadModal }) => {
     try {
       const token = localStorage.getItem("access");
       // const response = await axios.post(`${getConfig("REACT_APP_BACKEND_URL")}/api/clients/import-csv/`, formData, {
-      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/clients/import-csv/`, formData, {
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/clients/import-csv/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`
