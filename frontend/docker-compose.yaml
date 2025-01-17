@@ -3,6 +3,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: peetahdarius/mikrotik-system-frontend
+    image: peetahdarius/mikrotik-system-frontend:1.01
     ports:
       - 80:80
