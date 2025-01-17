@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: unifi-bmtechsys-com-cert
+  namespace: default
+spec:
+  secretName: unifi-bmtechsys-com-tls 
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+  - unifi.bmtechsys.com
